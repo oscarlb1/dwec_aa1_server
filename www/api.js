@@ -15,7 +15,7 @@
 // Para añadir un nuevo sitio a una categoría (el body debe incluir el categoryId)
 // POST http://localhost:3000/sites
 
-// --- Rutas de ELIMINACIÓN (DELETE) ---
+// (DELETE)
 // Para eliminar una categoría (reemplaza :id)
 // DELETE http://localhost:3000/categories/:id
 
