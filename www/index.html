@@ -1,29 +1,63 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <title>Gestor de Contraseñas</title>
+  <link rel="stylesheet" href="index.css">
 </head>
 <body>
-  <main>
-    <ul></ul>
-  </main>
-  <script>
-    let drawData = (data) => {
-      data.forEach(category => {
-        let parent = document.getElementsByTagName('ul')[0]
-        let child = document.createElement('li')
-        // child.innerText = JSON.stringify(category)
-        child.innerText = category.name
-        parent.appendChild(child)
-      })
-    }
+  <div class="container">
+    <header>
+      <h1>Gestor de Contraseñas</h1>
+      <div>
+        <input type="text" id="searchInput" class="search-input" placeholder="Buscar...">
+      </div>
+    </header>
 
-    fetch("http://localhost:3000/categories")
-      .then(res => res.json())
-      .then(data => drawData(data))
-  </script>
+    <div class="main">
+      <aside class="sidebar">
+        <div class="sidebar-header">
+          <h2>Categorías</h2>
+          <button id="addCategoryBtn" class="btn-add">+</button>
+        </div>
+        <ul id="categoriesList"></ul>
+      </aside>
+
+      <section class="content">
+        <div class="content-header">
+          <h2 id="selectedCategoryName">Selecciona una categoría</h2>
+          <button id="addSiteBtn" class="btn-primary" style="display: none;">Agregar Sitio</button>
+        </div>
+
+        <div id="sitesContainer"></div>
+      </section>
+    </div>
+  </div>
+
+  <div id="categoryModal" class="modal">
+    <div class="modal-box">
+      <h3>Nueva Categoría</h3>
+      <input type="text" id="categoryNameInput" class="form-input" placeholder="Nombre de la categoría">
+      <div id="categoryError" class="error"></div>
+      <div class="modal-buttons">
+        <button id="cancelCategoryBtn" class="btn-secondary">Cancelar</button>
+        <button id="saveCategoryBtn" class="btn-primary">Guardar</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="confirmModal" class="modal">
+    <div class="modal-box">
+      <p id="confirmMessage"></p>
+      <div class="modal-buttons">
+        <button id="cancelConfirmBtn" class="btn-secondary">Cancelar</button>
+        <button id="confirmBtn" class="btn-danger">Eliminar</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="api.js"></script>
+  <script src="index.js"></script>
 </body>
 </html>
