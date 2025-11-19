@@ -6,7 +6,7 @@
 
 body {
   font-family: Arial, sans-serif;
-  background: #f0f0f0;
+  background: #f5f5f5;
   color: #333;
 }
 
@@ -31,7 +31,7 @@ header h1 {
 }
 
 .search-input {
-  padding: 8px 12px;
+  padding: 8px 15px;
   border: none;
   border-radius: 4px;
   width: 300px;
@@ -83,47 +83,56 @@ header h1 {
 
 #categoriesList {
   list-style: none;
-  padding: 10px;
+  padding: 12px;
 }
 
+/* Improved category card design with professional styling, better spacing, and cleaner look */
 .category-item {
-  padding: 10px 12px;
-  margin: 3px 0;
+  padding: 16px 16px;
+  margin: 6px 0;
   cursor: pointer;
-  border-radius: 4px;
-  background: #f9f9f9;
+  border-radius: 8px;
+  background: white;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 14px;
+  font-size: 15px;
+  font-weight: 500;
+  border-left: 5px solid #34495e;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: all 0.25s ease;
+  color: #2c3e50;
 }
 
 .category-item:hover {
-  background: #ecf0f1;
+  background: #f8f9fa;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+  transform: translateX(6px);
 }
 
 .category-item.active {
-  background: #3498db;
+  background: #34495e;
   color: white;
+  box-shadow: 0 4px 14px rgba(52, 73, 94, 0.25);
 }
 
 .category-delete {
   background: none;
-  border: none;
+  border: 1px solid #e74c3c;
   color: #e74c3c;
   cursor: pointer;
-  font-size: 16px;
-  padding: 0 5px;
-  opacity: 0;
-}
-
-.category-item:hover .category-delete {
-  opacity: 1;
+  padding: 5px 10px;
+  transition: all 0.2s ease;
+  font-weight: 500;
+  font-size: 12px;
+  border-radius: 4px;
 }
 
 .category-delete:hover {
-  font-weight: bold;
+  background: #e74c3c;
+  color: white;
 }
+
 
 .content {
   flex: 1;
@@ -154,7 +163,7 @@ header h1 {
 .empty-state {
   text-align: center;
   color: #999;
-  padding: 40px 20px;
+  padding: 40px;
 }
 
 table {
@@ -219,18 +228,17 @@ table tr:hover {
   background: #c0392b;
 }
 
-.btn-action {
+.btn-delete {
   background: none;
   border: none;
-  color: #3498db;
+  color: #e74c3c;
   cursor: pointer;
   font-size: 14px;
   padding: 5px;
-  margin: 0 3px;
 }
 
-.btn-action:hover {
-  color: #e74c3c;
+.btn-delete:hover {
+  font-weight: bold;
 }
 
 .modal {
@@ -271,7 +279,6 @@ table tr:hover {
   border-radius: 4px;
   font-size: 13px;
   margin-bottom: 10px;
-  font-family: inherit;
 }
 
 .form-input:focus {
@@ -299,26 +306,4 @@ table tr:hover {
 
 .modal-buttons .btn {
   flex: 1;
-}
-
-@media (max-width: 768px) {
-  .main {
-    flex-direction: column;
-  }
-
-  .sidebar {
-    width: 100%;
-    border-right: none;
-    border-bottom: 1px solid #ddd;
-    max-height: 150px;
-  }
-
-  header {
-    flex-direction: column;
-    gap: 10px;
-  }
-
-  .search-input {
-    width: 100%;
-  }
 }

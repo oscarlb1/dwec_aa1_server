@@ -6,7 +6,7 @@
 
 body {
   font-family: Arial, sans-serif;
-  background: #f0f0f0;
+  background: #f5f5f5;
   padding: 20px;
   display: flex;
   align-items: center;
@@ -23,7 +23,7 @@ body {
   padding: 30px;
 }
 
-.form-container h1 {
+.form-box h1 {
   font-size: 20px;
   margin-bottom: 20px;
   color: #333;
@@ -55,7 +55,7 @@ body {
   border-color: #3498db;
 }
 
-.form-input.error {
+.form-input.error-input {
   border-color: #e74c3c;
 }
 
@@ -130,4 +130,70 @@ body {
 
 .btn-secondary:hover {
   background: #7f8c8d;
+}
+
+.categories-section {
+  background: #f5f5f5;
+  padding: 20px;
+  border-radius: 8px;
+  height: 500px;
+  overflow-y: auto;
+}
+
+#categories-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.category-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 15px;
+  margin-bottom: 8px;
+  background: white;
+  border-left: 4px solid #0066cc;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.category-item:hover {
+  background: #f0f8ff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.category-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: 10px;
+}
+
+.category-name {
+  color: #0066cc;
+  text-decoration: none;
+  font-weight: 500;
+  flex: 1;
+  cursor: pointer;
+}
+
+.category-name:hover {
+  text-decoration: underline;
+}
+
+.btn-delete-category {
+  padding: 6px 12px;
+  background: #ff4444;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-delete-category:hover {
+  background: #cc0000;
 }

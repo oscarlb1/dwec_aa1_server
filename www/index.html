@@ -10,16 +10,14 @@
   <div class="container">
     <header>
       <h1>Gestor de Contraseñas</h1>
-      <div>
-        <input type="text" id="searchInput" class="search-input" placeholder="Buscar...">
-      </div>
+      <input type="text" id="searchInput" class="search-input" placeholder="Buscar...">
     </header>
 
     <div class="main">
       <aside class="sidebar">
         <div class="sidebar-header">
           <h2>Categorías</h2>
-          <button id="addCategoryBtn" class="btn-add">+</button>
+          <button onclick="abrirModalCategoria()" class="btn-add">+</button>
         </div>
         <ul id="categoriesList"></ul>
       </aside>
@@ -27,9 +25,8 @@
       <section class="content">
         <div class="content-header">
           <h2 id="selectedCategoryName">Selecciona una categoría</h2>
-          <button id="addSiteBtn" class="btn-primary" style="display: none;">Agregar Sitio</button>
+          <button id="addSiteBtn" onclick="irAFormulario()" class="btn-primary" style="display: none;">Agregar Sitio</button>
         </div>
-
         <div id="sitesContainer"></div>
       </section>
     </div>
@@ -41,8 +38,8 @@
       <input type="text" id="categoryNameInput" class="form-input" placeholder="Nombre de la categoría">
       <div id="categoryError" class="error"></div>
       <div class="modal-buttons">
-        <button id="cancelCategoryBtn" class="btn-secondary">Cancelar</button>
-        <button id="saveCategoryBtn" class="btn-primary">Guardar</button>
+        <button onclick="cerrarModalCategoria()" class="btn-secondary">Cancelar</button>
+        <button onclick="guardarCategoria()" class="btn-primary">Guardar</button>
       </div>
     </div>
   </div>
@@ -51,13 +48,12 @@
     <div class="modal-box">
       <p id="confirmMessage"></p>
       <div class="modal-buttons">
-        <button id="cancelConfirmBtn" class="btn-secondary">Cancelar</button>
-        <button id="confirmBtn" class="btn-danger">Eliminar</button>
+        <button onclick="cerrarConfirm()" class="btn-secondary">Cancelar</button>
+        <button onclick="confirmarEliminacion()" class="btn-danger">Eliminar</button>
       </div>
     </div>
   </div>
 
-  <script src="api.js"></script>
-  <script src="index.js"></script>
+  <script type="module" src="index.js"></script>
 </body>
 </html>

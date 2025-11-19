@@ -64,5 +64,4 @@ class API {
     return response.json();
   }
 }
-
-const api = new API();
+export const api = new API();
