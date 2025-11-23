@@ -1,169 +1,221 @@
-import { api } from './api.js';
+import { api } from "./api.js"
 
-const categoriesList = document.getElementById('categoriesList');
-const selectedCategoryName = document.getElementById('selectedCategoryName');
-const addSiteBtn = document.getElementById('addSiteBtn');
-const sitesContainer = document.getElementById('sitesContainer');
-const categoryModal = document.getElementById('categoryModal');
-const categoryNameInput = document.getElementById('categoryNameInput');
-const categoryError = document.getElementById('categoryError');
-const confirmModal = document.getElementById('confirmModal');
-const confirmMessage = document.getElementById('confirmMessage');
-let currentCategoryId = null;
-let categoryToDeleteId = null;
+let selectedCategoryId = null
+let allCategories = []
 
-function renderCategories(categories) {
-  categoriesList.innerHTML = '';
-  categories.forEach(category => {
-    const categoryItem = document.createElement('li');
-    categoryItem.onclick = () => selectCategory(category.id, category.name);
-    if (category.id === currentCategoryId) {
-      categoryItem.classList.add('active');
-    }
+const categoryModal = document.getElementById("categoryModal")
+const confirmModal = document.getElementById("confirmModal")
+const addCategoryBtn = document.getElementById("addCategoryBtn")
+const addSiteBtn = document.getElementById("addSiteBtn")
+const categoryNameInput = document.getElementById("categoryNameInput")
+const categoryError = document.getElementById("categoryError")
+const categoriesList = document.getElementById("categoriesList")
+const sitesContainer = document.getElementById("sitesContainer")
+const selectedCategoryName = document.getElementById("selectedCategoryName")
 
-    categoryItem.innerHTML = `
-            ${category.name}
-            <button onclick="prepararEliminacion(${category.id}, '${category.name}')">
-                Borrar
-            </button>
-        `;
-    categoriesList.appendChild(categoryItem);
-  });
+let pendingDeleteAction = null
+
+function openCategoryModal() {
+  categoryModal.classList.add("active")
+  categoryNameInput.value = ""
+  categoryError.textContent = ""
+  categoryNameInput.focus()
 }
 
+function closeCategoryModal() {
+  categoryModal.classList.remove("active")
+}
+
+function openConfirmModal(message, action) {
+  document.getElementById("confirmMessage").textContent = message
+  pendingDeleteAction = action
+  confirmModal.classList.add("active")
+}
+
+function closeConfirmModal() {
+  confirmModal.classList.remove("active")
+  pendingDeleteAction = null
+}
+
+// OBLIGATORIO: Validar nombre de categoría 
+function validateCategoryName(name) {
+  if (!name || name.trim().length === 0) {
+    categoryError.textContent = "El nombre es obligatorio"
+    categoryError.classList.add("show")
+    return false
+  }
+  categoryError.classList.remove("show")
+  return true
+}
+
+// OBLIGATORIO: Añadir nueva categoría
+async function handleSaveCategory() {
+  const name = categoryNameInput.value.trim()
+  if (!validateCategoryName(name)) return
+
+  try {
+    await api.addCategory({ name })
+    closeCategoryModal()
+    loadCategories()
+  } catch (error) {
+    console.error("Error:", error)
+  }
+}
+
+// OBLIGATORIO: Eliminar categoría
+async function handleDeleteCategory(categoryId) {
+  try {
+    await api.deleteCategory(categoryId)
+    closeConfirmModal()
+    if (selectedCategoryId === categoryId) {
+      selectedCategoryId = null
+      sitesContainer.innerHTML = "<p>Selecciona una categoría</p>"
+      selectedCategoryName.textContent = "Selecciona una categoría"
+    }
+    loadCategories()
+  } catch (error) {
+    console.error("Error:", error)
+  }
+}
+
+// OBLIGATORIO: Eliminar sitio
+async function handleDeleteSite(siteId) {
+  try {
+    await api.deleteSite(siteId)
+    closeConfirmModal()
+    if (selectedCategoryId) {
+      loadSites(selectedCategoryId)
+    }
+  } catch (error) {
+    console.error("Error:", error)
+  }
+}
+
+// OBLIGATORIO: Cargar categorías
+async function loadCategories() {
+  try {
+    const categories = await api.getCategories()
+    allCategories = categories
+    renderCategories()
+  } catch (error) {
+    console.error("Error:", error)
+  }
+}
+
+// OBLIGATORIO: Renderizar categorías
+function renderCategories() {
+  categoriesList.innerHTML = ""
+  const seenIds = new Set()
+
+  allCategories.forEach((category) => {
+    if (!seenIds.has(category.id)) {
+      seenIds.add(category.id)
+
+      const li = document.createElement("li")
+      li.className = `category-item ${category.id === selectedCategoryId ? "active" : ""}`
+
+      li.innerHTML = `
+        <span>${category.name}</span>
+        <button class="category-delete">Borrar</button>
+      `
+
+      li.addEventListener("click", (e) => {
+        if (e.target.classList.contains("category-delete")) {
+          e.stopPropagation()
+          openConfirmModal(`¿Eliminar "${category.name}"?`, () => handleDeleteCategory(category.id))
+        } else {
+          selectCategory(category.id)
+        }
+      })
+
+      categoriesList.appendChild(li)
+    }
+  })
+}
+
+// OBLIGATORIO: Seleccionar categoría y cargar sus sitios
+async function selectCategory(categoryId) {
+  selectedCategoryId = categoryId
+  renderCategories()
+  const category = allCategories.find((c) => c.id === categoryId)
+  selectedCategoryName.textContent = category.name
+  addSiteBtn.style.display = "block"
+  loadSites(categoryId)
+}
+
+// OBLIGATORIO: Cargar sitios de una categoría desde servidor
+async function loadSites(categoryId) {
+  try {
+    const category = await api.getCategorySites(categoryId)
+    const sites = category.sites || []
+    renderSites(sites)
+  } catch (error) {
+    console.error("Error:", error)
+  }
+}
+
+// OBLIGATORIO: Renderizar sitios en tabla
 function renderSites(sites) {
-  sitesContainer.innerHTML = '';
   if (sites.length === 0) {
-    sitesContainer.innerHTML = '<p>No hay sitios guardados.</p>';
-    return;
+    sitesContainer.innerHTML = "<p>No hay sitios en esta categoría</p>"
+    return
   }
 
-  sites.forEach(site => {
-    const siteDiv = document.createElement('div');
-    siteDiv.innerHTML = `
-            <h3>${site.name}</h3>
-            <p>Usuario: ${site.user}</p>
-            <p>Contraseña: *******</p>
-            <p>URL: ${site.url || 'Sin URL'}</p>
-            <button onclick="deleteSite(${site.id})">Eliminar</button>
-            <hr>
-        `;
-    sitesContainer.appendChild(siteDiv);
-  });
+  let html = `
+    <table>
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Usuario</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+  `
+
+  sites.forEach((site) => {
+    html += `
+      <tr>
+        <td>${site.name}</td>
+        <td>${site.user}</td>
+        <td>
+          <button onclick="deleteSiteConfirm(${site.id}, '${site.name}')">Eliminar</button>
+        </td>
+      </tr>
+    `
+  })
+
+  html += `
+      </tbody>
+    </table>
+  `
+
+  sitesContainer.innerHTML = html
 }
 
-async function cargarCategories() {
-  try {
-    const categories = await api.getCategories();
-    renderCategories(categories);
-  } catch (error) {
-    categoriesList.innerHTML = '<li>Error de conexión.</li>';
-  }
+// OBLIGATORIO: Confirmar eliminación de sitio
+function deleteSiteConfirm(siteId, siteName) {
+  openConfirmModal(`¿Eliminar sitio "${siteName}"?`, () => handleDeleteSite(siteId))
 }
 
-async function selectCategory(categoryId, categoryName) {
-  currentCategoryId = categoryId;
-  selectedCategoryName.textContent = categoryName;
-  addSiteBtn.style.display = 'block';
-  cargarCategories();
-  try {
-    const categoryData = await api.getCategorySites(categoryId);
-    renderSites(categoryData.sites || []);
-  } catch (error) {
-    sitesContainer.innerHTML = '<p>Error al cargar los sitios.</p>';
-  }
-}
+// EVENT LISTENERS
+addCategoryBtn.addEventListener("click", openCategoryModal)
+document.getElementById("cancelCategoryBtn").addEventListener("click", closeCategoryModal)
+document.getElementById("saveCategoryBtn").addEventListener("click", handleSaveCategory)
+document.getElementById("cancelConfirmBtn").addEventListener("click", closeConfirmModal)
+document.getElementById("confirmBtn").addEventListener("click", () => pendingDeleteAction && pendingDeleteAction())
 
-async function deleteSite(siteId) {
-  if (!confirm('¿Seguro que quieres eliminar este sitio?')) return;
+// OBLIGATORIO: Ir a formulario para agregar sitio
+addSiteBtn.addEventListener("click", () => {
+  localStorage.setItem("selectedCategoryId", selectedCategoryId)
+  window.location.href = "form.html"
+})
 
-  try {
-    await api.deleteSite(siteId);
-    if (currentCategoryId) {
-      const currentCategoryName = selectedCategoryName.textContent;
-      await selectCategory(currentCategoryId, currentCategoryName);
-    }
-  } catch (error) {
-    alert(`Error al eliminar sitio.`);
-  }
-}
+categoryNameInput.addEventListener("keypress", (e) => {
+  if (e.key === "Enter") handleSaveCategory()
+})
 
-function abrirModalCategoria() {
-  categoryNameInput.value = '';
-  categoryError.textContent = '';
-  categoryModal.style.display = 'block';
-  categoryNameInput.focus();
-}
+loadCategories()
 
-function cerrarModalCategoria() {
-  categoryModal.style.display = 'none';
-}
-
-async function guardarCategoria() {
-  const name = categoryNameInput.value.trim();
-  categoryError.textContent = '';
-
-  if (!name) {
-    categoryError.textContent = 'El nombre es obligatorio.';
-    return;
-  }
-  try {
-    await api.addCategory(name);
-    cerrarModalCategoria();
-    await cargarCategories();
-  } catch (error) {
-    categoryError.textContent = `Error: La categoría ya existe o hay un problema.`;
-  }
-}
-
-function prepararEliminacion(id, name) {
-  categoryToDeleteId = id;
-  confirmMessage.textContent = `¿Seguro que quieres eliminar "${name}" y todos sus sitios?`;
-  confirmModal.style.display = 'block';
-}
-
-function cerrarConfirm() {
-  categoryToDeleteId = null;
-  confirmModal.style.display = 'none';
-}
-
-async function confirmarEliminacion() {
-  if (categoryToDeleteId === null) return;
-
-  try {
-    await api.deleteCategory(categoryToDeleteId);
-    cerrarConfirm();
-
-    if (categoryToDeleteId === currentCategoryId) {
-      currentCategoryId = null;
-      selectedCategoryName.textContent = 'Selecciona una categoría';
-      addSiteBtn.style.display = 'none';
-      sitesContainer.innerHTML = '';
-    }
-    await cargarCategories();
-
-  } catch (error) {
-    alert("Error al intentar eliminar la categoría.");
-    cerrarConfirm();
-  }
-}
-
-async function irAFormulario() {
-  if (currentCategoryId) {
-    window.location.assign(`form.html?categoryId=${currentCategoryId}`);
-  } else {
-    alert("Selecciona una categoría primero.");
-  }
-}
-
-cargarCategories();
-
-window.selectCategory = selectCategory;
-window.deleteSite = deleteSite;
-window.abrirModalCategoria = abrirModalCategoria;
-window.cerrarModalCategoria = cerrarModalCategoria;
-window.guardarCategoria = guardarCategoria;
-window.prepararEliminacion = prepararEliminacion;
-window.cerrarConfirm = cerrarConfirm;
-window.confirmarEliminacion = confirmarEliminacion;
-window.irAFormulario = irAFormulario;
+window.selectCategory = selectCategory
+window.deleteSiteConfirm = deleteSiteConfirm
