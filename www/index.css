@@ -32,7 +32,7 @@ header h1 {
 
 .search-input {
   padding: 8px 15px;
-  border: none;
+  border: 1px solid #ccc;
   border-radius: 4px;
   width: 300px;
   font-size: 14px;
