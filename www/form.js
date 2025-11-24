@@ -39,6 +39,40 @@ function togglePassword() {
     sitePassword.type = sitePassword.type === "password" ? "text" : "password";
 }
 
+// OPCIONAL: Implementar la opción de autogenerar contraseña segura
+function generarContrasena() {
+    const longitud = 16;
+    if (longitud < 8) longitud = 8;
+    
+    const minusculas = 'abcdefghijklmnopqrstuvwxyz';
+    const mayusculas = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    const numeros = '0123456789';
+    const simbolos = '!@#$%^&*()_+[]{}|;:,.<>?';
+    const todosLosCaracteres = minusculas + mayusculas + numeros + simbolos;
+
+    let contrasena = '';
+
+    // Garantizar un carácter de cada tipo
+    contrasena += minusculas[Math.floor(Math.random() * minusculas.length)];
+    contrasena += mayusculas[Math.floor(Math.random() * mayusculas.length)];
+    contrasena += numeros[Math.floor(Math.random() * numeros.length)];
+    contrasena += simbolos[Math.floor(Math.random() * simbolos.length)];
+
+    // Rellenar hasta la longitud deseada
+    for (let i = contrasena.length; i < longitud; i++) {
+        contrasena += todosLosCaracteres[Math.floor(Math.random() * todosLosCaracteres.length)];
+    }
+
+    // Mezclar la contraseña final aleatoriamente
+    const contrasenaGenerada = contrasena.split('').sort(() => 0.5 - Math.random()).join('');
+
+    // Asignar el resultado al campo de entrada del formulario (sitePassword)
+    if (sitePassword) {
+        sitePassword.value = contrasenaGenerada; 
+    }
+}
+
+// OBLIGATORIO: Guardar un sitio
 function guardarSitio(e) {
 e.preventDefault();
 
@@ -76,3 +110,4 @@ window.validarUsuario = validarUsuario;
 window.validarContrasena = validarContrasena;
 window.togglePassword = togglePassword;
 window.guardarSitio = guardarSitio;
+window.generarContrasena = generarContrasena;
