@@ -5,7 +5,6 @@ let allCategories = []
 
 const categoryModal = document.getElementById("categoryModal")
 const confirmModal = document.getElementById("confirmModal")
-const addCategoryBtn = document.getElementById("addCategoryBtn")
 const addSiteBtn = document.getElementById("addSiteBtn")
 const categoryNameInput = document.getElementById("categoryNameInput")
 const categoryError = document.getElementById("categoryError")
@@ -102,7 +101,7 @@ async function loadCategories() {
   }
 }
 
-// OBLIGATORIO: Renderizar categorías
+// Renderizar categorías
 function renderCategories() {
   categoriesList.innerHTML = ""
   const seenIds = new Set()
@@ -133,7 +132,7 @@ function renderCategories() {
   })
 }
 
-// OBLIGATORIO: Seleccionar categoría y cargar sus sitios
+// OBLIGATORIO: Seleccionar categoría y ver sus sitios
 async function selectCategory(categoryId) {
   selectedCategoryId = categoryId
   renderCategories()
@@ -143,7 +142,7 @@ async function selectCategory(categoryId) {
   loadSites(categoryId)
 }
 
-// OBLIGATORIO: Cargar sitios de una categoría desde servidor
+// OBLIGATORIO: Cargar sitios de una categoría 
 async function loadSites(categoryId) {
   try {
     const category = await api.getCategorySites(categoryId)
@@ -154,7 +153,7 @@ async function loadSites(categoryId) {
   }
 }
 
-// OBLIGATORIO: Renderizar sitios en tabla
+// OBLIGATORIO: Renderizar sitios 
 function renderSites(sites) {
   if (sites.length === 0) {
     sitesContainer.innerHTML = "<p>No hay sitios en esta categoría</p>"
@@ -198,13 +197,6 @@ function deleteSiteConfirm(siteId, siteName) {
   openConfirmModal(`¿Eliminar sitio "${siteName}"?`, () => handleDeleteSite(siteId))
 }
 
-// EVENT LISTENERS
-addCategoryBtn.addEventListener("click", openCategoryModal)
-document.getElementById("cancelCategoryBtn").addEventListener("click", closeCategoryModal)
-document.getElementById("saveCategoryBtn").addEventListener("click", handleSaveCategory)
-document.getElementById("cancelConfirmBtn").addEventListener("click", closeConfirmModal)
-document.getElementById("confirmBtn").addEventListener("click", () => pendingDeleteAction && pendingDeleteAction())
-
 // OBLIGATORIO: Ir a formulario para agregar sitio
 addSiteBtn.addEventListener("click", () => {
   localStorage.setItem("selectedCategoryId", selectedCategoryId)
@@ -215,7 +207,20 @@ categoryNameInput.addEventListener("keypress", (e) => {
   if (e.key === "Enter") handleSaveCategory()
 })
 
+// EVENT LISTENERS
+document.getElementById("addCategoryBtn").addEventListener("click", openCategoryModal)
+document.getElementById("cancelCategoryBtn").addEventListener("click", closeCategoryModal)
+document.getElementById("saveCategoryBtn").addEventListener("click", handleSaveCategory)
+document.getElementById("confirmDeleteBtn").addEventListener("click", () => {
+  if (pendingDeleteAction) pendingDeleteAction()
+})
+
+
 loadCategories()
 
 window.selectCategory = selectCategory
 window.deleteSiteConfirm = deleteSiteConfirm
+window.openCategoryModal = openCategoryModal
+window.closeCategoryModal = closeCategoryModal
+window.openConfirmModal = openConfirmModal
+window.closeConfirmModal = closeConfirmModal

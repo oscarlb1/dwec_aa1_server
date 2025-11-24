@@ -14,27 +14,27 @@
       <form id="siteForm" novalidate>
         <div class="form-group">
           <label>Nombre del Sitio *</label>
-          <input type="text" id="siteName" class="form-input" placeholder="ej. Facebook" onblur="validarNombre()">
+          <input type="text" id="siteName" class="form-input" placeholder="ej. Facebook">
           <div class="error" id="nameError"></div>
         </div>
 
         <div class="form-group">
           <label>URL</label>
-          <input type="text" id="siteUrl" class="form-input" placeholder="ej. https://facebook.com" onblur="validarUrl()">
+          <input type="text" id="siteUrl" class="form-input" placeholder="ej. https://facebook.com">
           <div class="error" id="urlError"></div>
         </div>
 
         <div class="form-group">
           <label>Usuario *</label>
-          <input type="text" id="siteUser" class="form-input" placeholder="ej. usuario@email.com" onblur="validarUsuario()">
+          <input type="text" id="siteUser" class="form-input" placeholder="ej. usuario@email.com">
           <div class="error" id="userError"></div>
         </div>
 
         <div class="form-group">
           <label>Contraseña *</label>
           <div class="password-group">
-            <input type="password" id="sitePassword" class="form-input" placeholder="Ingresa contraseña" onblur="validarContrasena()">
-            <button type="button" onclick="togglePassword()" class="btn-toggle">Mostrar</button>
+            <input type="password" id="sitePassword" class="form-input" placeholder="Ingresa contraseña">
+            <button type="button" onclick="togglePassword()" class="btn-toggle" id="mostrar-contraseña">Mostrar</button>
             <button type="button" onclick="generarContrasena()" class="btn-generate">Generar</button>
           </div>
           <div class="error" id="passwordError"></div>
@@ -47,7 +47,7 @@
 
         <div class="form-buttons">
           <a href="index.html" class="btn btn-secondary">Cancelar</a>
-          <button type="submit" onclick="guardarSitio(event)" class="btn btn-primary">Guardar</button>
+          <button type="submit" class="btn btn-primary">Guardar</button>
         </div>
       </form>
     </div>

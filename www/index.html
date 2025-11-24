@@ -17,7 +17,7 @@
       <aside class="sidebar">
         <div class="sidebar-header">
           <h2>Categorías</h2>
-          <button onclick="abrirModalCategoria()" class="btn-add">+</button>
+          <button class="btn-add" id="addCategoryBtn">+</button>
         </div>
         <ul id="categoriesList"></ul>
       </aside>
@@ -38,8 +38,8 @@
       <input type="text" id="categoryNameInput" class="form-input" placeholder="Nombre de la categoría">
       <div id="categoryError" class="error"></div>
       <div class="modal-buttons">
-        <button onclick="cerrarModalCategoria()" class="btn-secondary">Cancelar</button>
-        <button onclick="guardarCategoria()" class="btn-primary">Guardar</button>
+        <button class="btn-secondary" id="cancelCategoryBtn">Cancelar</button>
+        <button class="btn-primary" id="saveCategoryBtn">Guardar</button>
       </div>
     </div>
   </div>
@@ -48,8 +48,8 @@
     <div class="modal-box">
       <p id="confirmMessage"></p>
       <div class="modal-buttons">
-        <button onclick="cerrarConfirm()" class="btn-secondary">Cancelar</button>
-        <button onclick="confirmarEliminacion()" class="btn-danger">Eliminar</button>
+        <button onclick="closeConfirmModal()" class="btn-secondary">Cancelar</button>
+        <button id="confirmDeleteBtn" class="btn-danger">Eliminar</button>
       </div>
     </div>
   </div>

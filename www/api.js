@@ -35,16 +35,23 @@ class API {
     return response.json();
   }
 
-  // Para añadir un nuevo sitio a una categoría (el body debe incluir el categoryId)
-  // POST http://localhost:3000/sites
+  // Para añadir un nuevo sitio a una categoría a través de la ruta de categorías (el body no incluye categoryId)
+  // POST http://localhost:3000/categories/:id
   async addSite(siteData) {
-    const response = await fetch(`${this.baseUrl}/sites`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(siteData)
+    const categoryId = siteData.categoryId; 
+    const { categoryId: _, ...siteBody } = siteData; 
+    const response = await fetch(`${this.baseUrl}/categories/${categoryId}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(siteBody)
     });
+    
+    if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Error al guardar el sitio. Código: ${response.status}. Detalle: ${errorText}`);
+    }
     return response.json();
-  }
+}
 
   // (DELETE) Para eliminar una categoría (reemplaza :id)
   // DELETE http://localhost:3000/categories/:id
@@ -52,7 +59,7 @@ class API {
     const response = await fetch(`${this.baseUrl}/categories/${categoryId}`, {
       method: 'DELETE'
     });
-    return response.json();
+    return response.ok;
   }
 
   // Para eliminar un sitio (reemplaza :id)
@@ -61,7 +68,7 @@ class API {
     const response = await fetch(`${this.baseUrl}/sites/${siteId}`, {
       method: 'DELETE'
     });
-    return response.json();
+    return response.ok;
   }
 }
 export const api = new API();
