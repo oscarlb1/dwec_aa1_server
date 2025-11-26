@@ -37,7 +37,7 @@ class API {
     // POST http://localhost:3000/categories/:id
     async addSite(siteData) {
         const categoryId = siteData.categoryId; 
-        const { categoryId: _, ...siteBody } = siteData; // Extrae categoryId y usa el resto del cuerpo
+        const { categoryId: _, ...siteBody } = siteData; 
         const response = await fetch(`${BASE_URL}/categories/${categoryId}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -69,4 +69,5 @@ class API {
         return response.ok;
     }
 }
+
 export const api = new API();

@@ -2,6 +2,7 @@ import { api } from "./api.js"
 
 let selectedCategoryId = null
 let allCategories = []
+let currentSites = []
 
 const categoryModal = document.getElementById("categoryModal")
 const confirmModal = document.getElementById("confirmModal")
@@ -102,11 +103,11 @@ async function loadCategories() {
 }
 
 // Renderizar categorías
-function renderCategories() {
+function renderCategories(categoriesToRender = allCategories) {
   categoriesList.innerHTML = ""
   const seenIds = new Set()
 
-  allCategories.forEach((category) => {
+  categoriesToRender.forEach((category) => {
     if (!seenIds.has(category.id)) {
       seenIds.add(category.id)
 
@@ -147,6 +148,8 @@ async function loadSites(categoryId) {
   try {
     const category = await api.getCategorySites(categoryId)
     const sites = category.sites || []
+    currentSites = sites 
+    document.getElementById("siteSearchInput").value = ""
     renderSites(sites)
   } catch (error) {
     console.error("Error:", error)
@@ -207,6 +210,24 @@ categoryNameInput.addEventListener("keypress", (e) => {
   if (e.key === "Enter") handleSaveCategory()
 })
 
+// OPCIONAL: Filtrar categorías
+function filterCategories() {
+  const searchTerm = document.getElementById("categorySearchInput").value.toLowerCase()
+  const filteredCategories = allCategories.filter(category =>
+    category.name.toLowerCase().includes(searchTerm)
+  )
+  renderCategories(filteredCategories) 
+}
+
+// OPCIONAL: Filtrar sitios
+function filterSites() {
+  const searchTerm = document.getElementById("siteSearchInput").value.toLowerCase()
+  const filteredSites = currentSites.filter(site =>
+    site.name.toLowerCase().includes(searchTerm)
+  )
+  renderSites(filteredSites) 
+}
+
 // EVENT LISTENERS
 document.getElementById("addCategoryBtn").addEventListener("click", openCategoryModal)
 document.getElementById("cancelCategoryBtn").addEventListener("click", closeCategoryModal)
@@ -214,6 +235,8 @@ document.getElementById("saveCategoryBtn").addEventListener("click", handleSaveC
 document.getElementById("confirmDeleteBtn").addEventListener("click", () => {
   if (pendingDeleteAction) pendingDeleteAction()
 })
+document.getElementById("categorySearchInput").addEventListener("input", filterCategories)
+document.getElementById("siteSearchInput").addEventListener("input", filterSites)
 
 
 loadCategories()
