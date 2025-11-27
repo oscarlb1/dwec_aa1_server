@@ -306,3 +306,50 @@ table tr:hover {
 .modal-buttons .btn {
   flex: 1;
 }
+
+/* 1. Estilos para la celda contenedora */
+.password-cell {
+  /* Usa flexbox para alinear el campo de contraseña y el botón horizontalmente */
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Espacio entre el campo de contraseña y el botón */
+}
+
+/* 2. Estilos para el campo de INPUT (.site-password-input) para que parezca TEXTO PLANO */
+.site-password-input {
+  /* ELIMINA LA APARIENCIA DE CAMPO DE FORMULARIO */
+  border: none !important;
+  background-color: transparent !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  
+  /* ASEGURA CONSISTENCIA CON EL TEXTO DE LA TABLA */
+  font-family: inherit; 
+  font-size: inherit;   
+  color: inherit;       
+  
+  /* REMUEVE INTERACCIONES VISUALES DE FORMULARIO */
+  cursor: default;
+  outline: none;       /* Quita el borde de foco al hacer clic */
+  box-shadow: none;    /* Quita cualquier sombra */
+  
+  /* DISTRIBUCIÓN DE ESPACIO */
+  flex-grow: 1; /* Permite que el input ocupe la mayor parte del espacio */
+  min-width: 0; 
+}
+
+/* 3. Estilos para el botón de toggle (opcional, pero mejora la presentación) */
+.btn-toggle-site {
+  padding: 5px 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.8em;
+  white-space: nowrap; /* Evita que el texto del botón se rompa */
+}
+
+.btn-toggle-site:hover {
+  background-color: #0056b3;
+}

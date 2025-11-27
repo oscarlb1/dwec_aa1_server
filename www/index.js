@@ -169,7 +169,7 @@ function renderSites(sites) {
         <tr>
           <th>Nombre</th>
           <th>Usuario</th>
-          <th>Acciones</th>
+          <th>Contraseña</th> <th>Acciones</th>
         </tr>
       </thead>
       <tbody>
@@ -177,13 +177,30 @@ function renderSites(sites) {
 
   sites.forEach((site) => {
     html += `
-      <tr>
-        <td>${site.name}</td>
-        <td>${site.user}</td>
-        <td>
-          <button onclick="deleteSiteConfirm(${site.id}, '${site.name}')">Eliminar</button>
-        </td>
-      </tr>
+        <tr>
+            <td>${site.name}</td>
+            <td>${site.user}</td>
+            <td>
+                <div class="password-cell"> 
+                    <input 
+                        type="password" 
+                        value="${site.password}" 
+                        readonly 
+                        class="site-password-input" 
+                        id="password-${site.id}"
+                    />
+                    <button 
+                        onclick="toggleSitePassword(${site.id}, this)" 
+                        class="btn-toggle-site"
+                    >
+                        Mostrar
+                    </button>
+                </div>
+            </td>
+            <td>
+                <button onclick="deleteSiteConfirm(${site.id}, '${site.name}')">Eliminar</button>
+            </td>
+        </tr>
     `
   })
 
@@ -193,6 +210,19 @@ function renderSites(sites) {
   `
 
   sitesContainer.innerHTML = html
+}
+
+// Mostrar/Ocultar contraseña del sitio
+function toggleSitePassword(siteId, buttonElement) {
+  const passwordInput = document.getElementById(`password-${siteId}`);
+
+  if (passwordInput.type === 'password') {
+    passwordInput.type = 'text';
+    buttonElement.textContent = 'Ocultar';
+  } else {
+    passwordInput.type = 'password';
+    buttonElement.textContent = 'Mostrar';
+  }
 }
 
 // OBLIGATORIO: Confirmar eliminación de sitio
@@ -247,3 +277,4 @@ window.openCategoryModal = openCategoryModal
 window.closeCategoryModal = closeCategoryModal
 window.openConfirmModal = openConfirmModal
 window.closeConfirmModal = closeConfirmModal
+window.toggleSitePassword = toggleSitePassword
