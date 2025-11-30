@@ -4,6 +4,9 @@ let selectedCategoryId = null
 let allCategories = []
 let currentSites = []
 
+// LISTA DE ICONOS PREDEFINIDOS
+const PREDEFINED_ICONS = ['💻', '📱', '📧', '🔑', '☁️', '🛒', '🎮', '💳', '🛠️', '📰'];
+
 const categoryModal = document.getElementById("categoryModal")
 const confirmModal = document.getElementById("confirmModal")
 const addSiteBtn = document.getElementById("addSiteBtn")
@@ -12,13 +15,41 @@ const categoryError = document.getElementById("categoryError")
 const categoriesList = document.getElementById("categoriesList")
 const sitesContainer = document.getElementById("sitesContainer")
 const selectedCategoryName = document.getElementById("selectedCategoryName")
+// NUEVAS VARIABLES DEL SELECTOR
+const iconSelector = document.getElementById("iconSelector")
+const selectedIconValueInput = document.getElementById("selectedIconValue")
+
 
 let pendingDeleteAction = null
+
+function renderIconSelector() {
+    iconSelector.innerHTML = "" 
+
+    PREDEFINED_ICONS.forEach(icon => {
+        const span = document.createElement("span")
+        span.textContent = icon
+        span.className = "icon-option"
+        span.dataset.icon = icon
+
+        span.addEventListener("click", () => {
+            document.querySelectorAll(".icon-option").forEach(el => el.classList.remove("selected"))
+            span.classList.add("selected")
+            selectedIconValueInput.value = icon 
+        })
+
+        iconSelector.appendChild(span)
+    })
+}
 
 function openCategoryModal() {
   categoryModal.classList.add("active")
   categoryNameInput.value = ""
   categoryError.textContent = ""
+  
+  renderIconSelector()
+  selectedIconValueInput.value = "" 
+  document.querySelectorAll(".icon-option").forEach(el => el.classList.remove("selected"))
+
   categoryNameInput.focus()
 }
 
@@ -51,10 +82,18 @@ function validateCategoryName(name) {
 // OBLIGATORIO: Añadir nueva categoría
 async function handleSaveCategory() {
   const name = categoryNameInput.value.trim()
+  const icon = selectedIconValueInput.value.trim() 
+
   if (!validateCategoryName(name)) return
 
+  if (!icon) {
+    categoryError.textContent = "Debes seleccionar un icono"
+    categoryError.classList.add("show")
+    return
+  }
+
   try {
-    await api.addCategory({ name })
+    await api.addCategory({ name, icon })
     closeCategoryModal()
     loadCategories()
   } catch (error) {
@@ -113,8 +152,11 @@ function renderCategories(categoriesToRender = allCategories) {
 
       const li = document.createElement("li")
       li.className = `category-item ${category.id === selectedCategoryId ? "active" : ""}`
+      
+      const iconContent = `<span class="category-icon">${category.icon || '📁'}</span>`;
 
       li.innerHTML = `
+        ${iconContent}
         <span>${category.name}</span>
         <button class="category-delete">Borrar</button>
       `
@@ -221,7 +263,7 @@ function toggleSitePassword(siteId, buttonElement) {
     buttonElement.textContent = 'Ocultar';
   } else {
     passwordInput.type = 'password';
-    buttonElement.textContent = 'Mostrar';
+    passwordElement.textContent = 'Mostrar';
   }
 }
 

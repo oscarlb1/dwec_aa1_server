@@ -86,7 +86,7 @@ header h1 {
   padding: 12px;
 }
 
-/* Improved category card design with professional styling, better spacing, and cleaner look */
+/* MODIFICADO: Añadir display: flex para el icono */
 .category-item {
   padding: 16px 16px;
   margin: 6px 0;
@@ -102,6 +102,18 @@ header h1 {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   transition: all 0.25s ease;
   color: #2c3e50;
+  /* Espacio entre el icono y el texto */
+  gap: 10px; 
+}
+
+.category-item > span:first-of-type {
+  flex-grow: 1;
+}
+
+.category-icon {
+  font-size: 1.2em; 
+  min-width: 20px;
+  text-align: center;
 }
 
 .category-item:hover {
@@ -125,6 +137,7 @@ header h1 {
   font-weight: 500;
   font-size: 12px;
   border-radius: 4px;
+  white-space: nowrap; /* Evitar que el botón se rompa */
 }
 
 .category-delete:hover {
@@ -309,36 +322,31 @@ table tr:hover {
 
 /* 1. Estilos para la celda contenedora */
 .password-cell {
-  /* Usa flexbox para alinear el campo de contraseña y el botón horizontalmente */
   display: flex;
   align-items: center;
-  gap: 10px; /* Espacio entre el campo de contraseña y el botón */
+  gap: 10px; 
 }
 
 /* 2. Estilos para el campo de INPUT (.site-password-input) para que parezca TEXTO PLANO */
 .site-password-input {
-  /* ELIMINA LA APARIENCIA DE CAMPO DE FORMULARIO */
   border: none !important;
   background-color: transparent !important;
   padding: 0 !important;
   margin: 0 !important;
   
-  /* ASEGURA CONSISTENCIA CON EL TEXTO DE LA TABLA */
   font-family: inherit; 
   font-size: inherit;   
   color: inherit;       
   
-  /* REMUEVE INTERACCIONES VISUALES DE FORMULARIO */
   cursor: default;
-  outline: none;       /* Quita el borde de foco al hacer clic */
-  box-shadow: none;    /* Quita cualquier sombra */
+  outline: none;       
+  box-shadow: none;    
   
-  /* DISTRIBUCIÓN DE ESPACIO */
-  flex-grow: 1; /* Permite que el input ocupe la mayor parte del espacio */
+  flex-grow: 1; 
   min-width: 0; 
 }
 
-/* 3. Estilos para el botón de toggle (opcional, pero mejora la presentación) */
+/* 3. Estilos para el botón de toggle */
 .btn-toggle-site {
   padding: 5px 10px;
   background-color: #007bff;
@@ -347,9 +355,50 @@ table tr:hover {
   border-radius: 4px;
   cursor: pointer;
   font-size: 0.8em;
-  white-space: nowrap; /* Evita que el texto del botón se rompa */
+  white-space: nowrap; 
 }
 
 .btn-toggle-site:hover {
   background-color: #0056b3;
+}
+
+/* NUEVOS ESTILOS PARA EL SELECTOR DE ICONOS */
+.icon-selector-container h4 {
+    margin-top: 10px;
+    margin-bottom: 5px;
+    font-size: 14px;
+    color: #555;
+    font-weight: normal;
+}
+
+.icon-selector {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #bdc3c7;
+    border-radius: 4px;
+    background-color: #fcfcfc;
+    justify-content: space-around;
+}
+
+.icon-option {
+    font-size: 1.5em;
+    cursor: pointer;
+    padding: 5px 8px;
+    border-radius: 4px;
+    transition: background-color 0.15s, transform 0.1s;
+    line-height: 1;
+}
+
+.icon-option:hover {
+    background-color: #e0e0e0;
+    transform: scale(1.1);
+}
+
+.icon-option.selected {
+    background-color: #3498db; 
+    border: 1px solid #2980b9;
+    transform: scale(1.05);
 }

@@ -14,7 +14,7 @@
       <form id="siteForm" novalidate>
         <div class="form-group">
           <label>Nombre del Sitio *</label>
-          <input type="text" id="siteName" class="form-input" placeholder="ej. Facebook">
+          <input type="text" id="siteName" class="form-input" placeholder="ej. Facebook" onblur="validarNombre()">
           <div class="error" id="nameError"></div>
         </div>
 
@@ -26,14 +26,14 @@
 
         <div class="form-group">
           <label>Usuario *</label>
-          <input type="text" id="siteUser" class="form-input" placeholder="ej. usuario@email.com">
+          <input type="text" id="siteUser" class="form-input" placeholder="ej. usuario@email.com" onblur="validarUsuario()">
           <div class="error" id="userError"></div>
         </div>
 
         <div class="form-group">
           <label>Contraseña *</label>
           <div class="password-group">
-            <input type="password" id="sitePassword" class="form-input" placeholder="Ingresa contraseña">
+            <input type="password" id="sitePassword" class="form-input" placeholder="Ingresa contraseña" onblur="validarContrasena()">
             <button type="button" onclick="togglePassword()" class="btn-toggle" id="mostrar-contraseña">Mostrar</button>
             <button type="button" onclick="generarContrasena()" class="btn-generate">Generar</button>
           </div>

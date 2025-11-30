@@ -8,7 +8,7 @@ class API {
         return response.json();
     }
 
-    // Para obtener una categoría y todos sus sitios (reemplaza :id)
+    // Para obtener una categoría y todos sus sitios (reemplaza :id por la id que quieras obtener)
     // GET http://localhost:3000/categories/:id?_embed=sites
     async getCategorySites(categoryId) {
         const response = await fetch(`${BASE_URL}/categories/${categoryId}?_embed=sites`);

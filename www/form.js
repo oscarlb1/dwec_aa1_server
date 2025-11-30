@@ -11,27 +11,39 @@ const passwordError = document.getElementById("passwordError");
 function validarNombre() {
   if (!siteName.value.trim()) {
     nameError.textContent = "El nombre es obligatorio";
+    nameError.classList.add("show"); 
+    siteName.classList.add("error");
     return false;
   }
   nameError.textContent = "";
+  nameError.classList.remove("show"); 
+  siteName.classList.remove("error");
   return true;
 }
 
 function validarUsuario() {
   if (!siteUser.value.trim()) {
     userError.textContent = "El usuario es obligatorio";
+    userError.classList.add("show");
+    siteUser.classList.add("error");
     return false;
   }
   userError.textContent = "";
+  userError.classList.remove("show");
+  siteUser.classList.remove("error");
   return true;
 }
 
 function validarContrasena() {
   if (!sitePassword.value.trim()) {
     passwordError.textContent = "La contraseña es obligatoria";
+    passwordError.classList.add("show");
+    sitePassword.classList.add("error");
     return false;
   }
   passwordError.textContent = "";
+  passwordError.classList.remove("show");
+  sitePassword.classList.remove("error");
   return true;
 }
 
