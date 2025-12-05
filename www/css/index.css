@@ -45,7 +45,7 @@ header h1 {
 }
 
 .sidebar {
-  width: 220px;
+  width: 250px;
   background: white;
   border-right: 1px solid #ddd;
   display: flex;

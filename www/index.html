@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Gestor de Contraseñas</title>
-  <link rel="stylesheet" href="index.css">
+  <link rel="stylesheet" href="css/index.css">
 </head>
 <body>
   <div class="container">
@@ -53,15 +53,17 @@
   </div>
 
   <div id="confirmModal" class="modal">
-    <div class="modal-box">
-      <p id="confirmMessage"></p>
-      <div class="modal-buttons">
-        <button onclick="closeConfirmModal()" class="btn-secondary">Cancelar</button>
-        <button id="confirmDeleteBtn" class="btn-danger">Eliminar</button>
+    <div class="modal-box confirm-box">
+      <h3>Confirmar Eliminación</h3>
+      <p id="confirmMessage" class="confirm-message">¿Estás seguro de que quieres eliminar este elemento?</p>
+      <div class="modal-buttons confirm-buttons">
+        <button onclick="closeConfirmModal()" class="btn btn-secondary">Cancelar</button>
+        <button id="confirmDeleteBtn" class="btn btn-danger">Eliminar</button>
       </div>
+  
     </div>
   </div>
 
-  <script type="module" src="index.js"></script>
+  <script type="module" src="js/index.js"></script>
 </body>
 </html>

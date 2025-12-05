@@ -53,7 +53,7 @@ function togglePassword() {
 
 // OPCIONAL: Implementar la opción de autogenerar contraseña segura
 function generarContrasena() {
-    const longitud = 16;
+    let longitud = 16;
     if (longitud < 8) longitud = 8;
     
     const minusculas = 'abcdefghijklmnopqrstuvwxyz';
@@ -85,8 +85,8 @@ function generarContrasena() {
 }
 
 // OBLIGATORIO: Guardar un sitio
-function guardarSitio(e) {
-e.preventDefault();
+async function guardarSitio(e) {
+  e.preventDefault();
 
   const isNameValid = validarNombre();
   const isUserValid = validarUsuario();
@@ -106,13 +106,13 @@ e.preventDefault();
     categoryId: categoryId
   };
 
-  api.addSite(siteData)
-    .then(() => {
-      window.location.href = "index.html";
-    })
-    .catch((error) => {
-      console.error("Error:", error);
-    });
+  try {
+    await api.addSite(siteData);
+    window.location.href = "index.html";
+  } catch (error) {
+    console.error("Error al guardar el sitio:", error);
+    // Opcional: Mostrar un mensaje de error al usuario
+  }
 }
 
 document.getElementById("siteForm").addEventListener("submit", guardarSitio);

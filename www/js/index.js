@@ -157,18 +157,24 @@ function renderCategories(categoriesToRender = allCategories) {
 
       li.innerHTML = `
         ${iconContent}
-        <span>${category.name}</span>
-        <button class="category-delete">Borrar</button>
+        <span style="flex-grow: 1;">${category.name}</span>
+        <button class="category-delete" title="Eliminar categoría">🗑️</button>
       `
 
       li.addEventListener("click", (e) => {
-        if (e.target.classList.contains("category-delete")) {
+        if (e.target.closest(".category-delete")) {
           e.stopPropagation()
           openConfirmModal(`¿Eliminar "${category.name}"?`, () => handleDeleteCategory(category.id))
         } else {
           selectCategory(category.id)
         }
       })
+      
+      const deleteButton = li.querySelector(".category-delete");
+      deleteButton.addEventListener("click", (e) => {
+          e.stopPropagation(); 
+          openConfirmModal(`¿Eliminar "${category.name}"?`, () => handleDeleteCategory(category.id));
+      });
 
       categoriesList.appendChild(li)
     }
@@ -263,7 +269,7 @@ function toggleSitePassword(siteId, buttonElement) {
     buttonElement.textContent = 'Ocultar';
   } else {
     passwordInput.type = 'password';
-    passwordElement.textContent = 'Mostrar';
+    buttonElement.textContent = 'Mostrar';
   }
 }
 
